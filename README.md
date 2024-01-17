@@ -58,6 +58,23 @@ $ yarn run test:e2e
 $ yarn run test:cov
 ```
 
+## Docker
+
+```bash
+
+# run docker
+$ docker compose up dev-db -d
+
+# show containers
+$ docker ps
+
+# show logs
+$ docker logs <container id>
+
+# stop a container
+$ docker stop <container id>
+```
+
 ## Support
 
 Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
