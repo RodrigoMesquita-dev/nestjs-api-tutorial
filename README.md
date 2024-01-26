@@ -75,6 +75,19 @@ $ docker logs <container id>
 $ docker stop <container id>
 ```
 
+## Prisma
+
+```bash
+
+# prisma studio
+$ npx prisma studio
+
+# migrate
+
+$ npx prisma migrate dev
+
+```
+
 ## Support
 
 Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
