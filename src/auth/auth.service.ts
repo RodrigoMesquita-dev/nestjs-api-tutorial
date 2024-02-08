@@ -5,8 +5,6 @@ import * as argon from 'argon2';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
-import { promises } from 'dns';
-import { use } from 'passport';
 
 @Injectable()
 export class AuthService {
@@ -52,7 +50,10 @@ export class AuthService {
     return this.signToken(user.id, user.email);
   }
 
-  async signToken(userId: number, email: string): Promise<{ access_token: string }> {
+  async signToken(
+    userId: number,
+    email: string,
+  ): Promise<{ access_token: string }> {
     const payload = {
       sub: userId,
       email,
@@ -61,9 +62,9 @@ export class AuthService {
     const access_token = await this.jwt.signAsync(payload, {
       expiresIn: '15m',
       secret,
-    })
+    });
     return {
-      access_token
-    }
+      access_token,
+    };
   }
 }
