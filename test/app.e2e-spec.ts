@@ -4,6 +4,7 @@ import * as pactum from 'pactum';
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { AuthDto } from 'src/auth/dto';
+import { EditUserDto } from 'src/user/dto';
 
 describe('App e2e', () => {
   let app: INestApplication;
@@ -32,12 +33,30 @@ describe('App e2e', () => {
   });
 
   describe('Auth', () => {
+    const dto: AuthDto = {
+      email: 'test@gmail.com',
+      password: '123',
+    };
     describe('Sign up', () => {
+      it('should throw if email empty', () => {
+        return pactum
+          .spec()
+          .post('/auth/signup')
+          .withBody({
+            password: dto.password
+          })
+          .expectStatus(400);  
+      });
+      it('should throw if password empty', () => {
+        return pactum
+          .spec()
+          .post('/auth/signup')
+          .withBody({
+            email: dto.email
+          })
+          .expectStatus(400);  
+      })
       it('should signup', () => {
-        const dto: AuthDto = {
-          email: 'test@gmail.com',
-          password: '123',
-        };
         return pactum
           .spec()
           .post('/auth/signup')
@@ -48,14 +67,49 @@ describe('App e2e', () => {
     });
 
     describe('Sign in', () => {
-      it.todo('should signup');
+      it('should signin', () => {
+        return pactum
+          .spec()
+          .post('/auth/signin')
+          .withBody(dto)
+          .expectStatus(201)
+          .stores('userAt', 'access_token')
+          .inspect();
+      });
     });
   });
 
   describe('User', () => {
-    describe('Get me', () => {});
+    describe('Get me', () => {
+      it('should return the user', () => {
+        return pactum
+          .spec()
+          .get('/users/me')
+          .withHeaders({
+            Authorization: 'Bearer $S{userAt}'
+          })
+          .expectStatus(200);
+      })
+    });
 
-    describe('Edit user', () => {});
+    describe('Edit user', () => {
+      it('should edit the user', () => {
+        const dto: EditUserDto = {
+          firstName: 'Vladimir',
+          email: 'tes2t@gmail.com'
+        }
+        return pactum
+          .spec()
+          .patch('/users')
+          .withHeaders({
+            Authorization: 'Bearer $S{userAt}'
+          })
+          .withBody(dto)
+          .expectStatus(200)
+          .expectBodyContains(dto.firstName)
+          .expectBodyContains(dto.email);
+      })
+    });
   });
 
   describe('Bookmarks', () => {
