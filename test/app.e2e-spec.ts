@@ -43,19 +43,19 @@ describe('App e2e', () => {
           .spec()
           .post('/auth/signup')
           .withBody({
-            password: dto.password
+            password: dto.password,
           })
-          .expectStatus(400);  
+          .expectStatus(400);
       });
       it('should throw if password empty', () => {
         return pactum
           .spec()
           .post('/auth/signup')
           .withBody({
-            email: dto.email
+            email: dto.email,
           })
-          .expectStatus(400);  
-      })
+          .expectStatus(400);
+      });
       it('should signup', () => {
         return pactum
           .spec()
@@ -86,29 +86,29 @@ describe('App e2e', () => {
           .spec()
           .get('/users/me')
           .withHeaders({
-            Authorization: 'Bearer $S{userAt}'
+            Authorization: 'Bearer $S{userAt}',
           })
           .expectStatus(200);
-      })
+      });
     });
 
     describe('Edit user', () => {
       it('should edit the user', () => {
         const dto: EditUserDto = {
           firstName: 'Vladimir',
-          email: 'tes2t@gmail.com'
-        }
+          email: 'tes2t@gmail.com',
+        };
         return pactum
           .spec()
           .patch('/users')
           .withHeaders({
-            Authorization: 'Bearer $S{userAt}'
+            Authorization: 'Bearer $S{userAt}',
           })
           .withBody(dto)
           .expectStatus(200)
           .expectBodyContains(dto.firstName)
           .expectBodyContains(dto.email);
-      })
+      });
     });
   });
 
